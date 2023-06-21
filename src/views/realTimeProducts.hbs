@@ -1,0 +1,28 @@
+<h3 class="title-color">Pagina principal</h3>
+
+<div>
+  <h2>Bienvenido</h2>
+  <h1>Agregar Productos en Tiempo Real:</h1>
+  <div>
+    <form id="productsHistory">
+     {{!-- <form  method="post" id="formulario" class="form-inline"> --}}
+        {{!-- <div class="form-group mx-sm-3 mb-2"> --}}
+          <input class="form-control" id="title" type="text" placeholder="title">
+          <input class="form-control" id="description" type="text" placeholder="description">
+          <input class="form-control" id="price" type="number" placeholder="price">
+          <input class="form-control" id="thumbnail" type="text" placeholder="thumbnail">
+          <input class="form-control" id="code" type="number"  placeholder="code">
+          <input class="form-control" id="stock" type="number" placeholder="stock">
+          <input class="form-control" id="status" type="text" id="texto" placeholder="status">
+          <input class="form-control" id="category" type="text"  placeholder="category">
+        {{!-- </div>        --}}
+        <button id="Agregar" type="submit" class="btn btn-primary mb-2">Agregar Producto</button>
+        <button id="Eliminar" type="submit" class="btn btn-primary mb-2">Eliminar Producto</button>
+      </form>
+     <hr />
+     <div id="productLogs"> </div>
+     </form>
+  </div>
+
+  <script src="socket.io/socket.io.js"></script>
+<script src="js/home.js"></script>
