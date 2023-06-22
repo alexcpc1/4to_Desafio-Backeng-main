@@ -27,10 +27,10 @@ router.get("/profile",(req,res)=>{
     res.render("profile",{user:req.user});
 });
 
-// router.get("/current",(req,res)=>{
-//     console.log(req.user);
-//     res.render("profile",{user:req.user});
-// });
+router.get("/current",(req,res)=>{
+    console.log(req.user);
+    res.render("profile",{user:req.user});
+});
 
 router.get("/",(req,res)=>{
     return res.render("chat");

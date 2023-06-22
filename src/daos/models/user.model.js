@@ -7,14 +7,10 @@ const usersSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    last_name: {
-        type:String,
-        required:false
-    },
-    age: {
-        type:Number,
-        required:false
-    },
+    last_name: String,
+
+    age: Number,
+
     email: {
         type: String,
         unique:true,
@@ -24,10 +20,15 @@ const usersSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    role: {
-        type: String,
+     cart:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"carts"
+    },
+    role:{
+        type:String,
+        required:true,
         enum:["user","admin"],
-        default: 'user',
+        default:"user"
     }
 });
 
