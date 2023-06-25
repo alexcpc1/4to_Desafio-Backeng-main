@@ -57,7 +57,7 @@ passport.use("loginStrategy", new localStrategy(
 
         if (userDB) {
             
-            if (validPassword(password, userDB)) {
+            if (isValidPassword(password, userDB)) {
                 return done(null, JSON.parse(JSON.stringify(userDB)));
             } else{
                 return done(null,false);

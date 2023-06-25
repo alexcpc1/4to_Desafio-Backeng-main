@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const usersCollection = "users";
 
 const usersSchema = new mongoose.Schema({
-    fisrt_name: {
+    first_name: {
         type:String,
         required:true
     },
