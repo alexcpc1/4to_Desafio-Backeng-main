@@ -1,6 +1,6 @@
 import express from "express";
 import { engine } from 'express-handlebars';
-import { options } from "./config/options.js";
+import { config } from "./config/config.js";
 import{__dirname} from "./utils.js";
 import path from "path";
 import { productsRouter } from "./routes/products.routes.js";
@@ -20,9 +20,10 @@ import { initPassport } from "./config/passport.config.js";
 //service
 const chatService = new ChatMongo(ChatModel);
 // Ejecucion del servidor
-export const PORT = 8080;
 const app = express();
-const httpServer = app.listen(PORT,()=>console.log(`Server listening on port ${PORT}`));
+const port = config.server.port;
+// const port = config.port;
+const httpServer = app.listen(port, ()=> console.log(`server listening on port ${port}`));
 
 //middlewares
 app.use(express.json());
@@ -34,9 +35,11 @@ httpServer.on('error', error => console.log(`Error in server ${error}`));
 // configuracion session
 app.use(session({
     store: MongoStore.create({
-        mongoUrl:options.mongo.url
+        mongoUrl:config.mongo.url
+        // mongoUrl: config.mongoUrl
     }),
-    secret:"claveSecreta",
+    secret:config.server.secretSession,
+    // secret: config.secretSession,
     resave:true,
     saveUninitialized:true
 }));
