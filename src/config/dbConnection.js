@@ -9,4 +9,3 @@ export const connectDB = async()=>{
       console.log(`Hubo un error al conectar la base de datos ${error.message}`);
   }
 }
-// connectDB()

@@ -62,7 +62,7 @@ const socketServer = new Server (httpServer);
 //routes
 app.use(viewsRouter);
 app.use("/api/products", productsRouter);
-app.use("/api/cart", cartsRouter);
+app.use("/api/carts", cartsRouter);
 app.use("/realtimeproducts", realtimeRouter);
 app.use("/api/sessions", sessionsRouter);
 

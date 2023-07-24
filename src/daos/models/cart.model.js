@@ -26,4 +26,3 @@ cartSchema.pre("findOne",function(){
 });
 // El parámetro "products.id" se refiere a la propiedad "id" del campo "products" del modelo "Cart".
 export const CartModel = mongoose.model(cartCollection,cartSchema);
-// revisado ok

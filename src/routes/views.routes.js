@@ -3,6 +3,7 @@ import { ProductsMongo } from "../daos/managers/products.mongo.js";
 import { ProductsModel } from "../daos/models/product.model.js";
 import { CartsMongo } from "../daos/managers/carts.mongo.js";
 import { CartModel } from "../daos/models/cart.model.js";
+import { checkUserAuthenticated, checkRoles } from "../middlewares/auth.js";
 
 const router = Router();
 
@@ -22,19 +23,23 @@ router.get("/signup", (req,res)=>{
     res.render("signup");
 });
 
-router.get("/profile",(req,res)=>{
+router.get("/profile", checkUserAuthenticated, (req,res)=>{
+    // console.log(req.user);
+    res.render("profile",{user:req.user});
+});
+
+router.get("/current", checkUserAuthenticated,(req,res)=>{
     console.log(req.user);
     res.render("profile",{user:req.user});
 });
 
-router.get("/current",(req,res)=>{
-    console.log(req.user);
-    res.render("profile",{user:req.user});
-});
-
-router.get("/",(req,res)=>{
-    return res.render("chat");
-});
+// router.get("/chat", checkUserAuthenticated, checkRoles(["user"]), async(req, res)=>{
+//     try {
+//         res.render("chat");
+//     } catch (error) {
+//         res.status(500).json({status: "error", message: error.message});
+//     }
+// });
 
 router.get("/products", (req, res)=>{
     console.log(req.user);

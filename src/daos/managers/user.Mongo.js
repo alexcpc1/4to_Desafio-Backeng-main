@@ -1,4 +1,4 @@
-class UserManagerMongo{
+class UserMongo{
     constructor(model){
         this.model=model;
     };
@@ -45,4 +45,4 @@ class UserManagerMongo{
     };
 }
 
-export {UserManagerMongo};
+export {UserMongo};

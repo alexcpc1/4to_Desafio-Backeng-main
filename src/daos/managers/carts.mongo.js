@@ -1,6 +1,5 @@
-// import mongoose from "mongoose";
+
 import { CartModel } from "../models/cart.model.js";
-// import { response } from "express";
 
 class CartsMongo{
     constructor(model){
