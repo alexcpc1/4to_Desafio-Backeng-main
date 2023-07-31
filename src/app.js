@@ -16,6 +16,8 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import { initPassport } from "./config/passport.config.js";
+import { mockRouter } from "./routes/mock.routes.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 //service
 const chatService = new ChatMongo(ChatModel);
@@ -65,6 +67,8 @@ app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/realtimeproducts", realtimeRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use("/api/mockingproducts", mockRouter);
+app.use (errorHandler);
 
 // configuración socket servidor
 socketServer.on("connection",async(socketConnected)=>{

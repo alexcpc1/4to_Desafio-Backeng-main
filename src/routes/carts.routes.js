@@ -17,7 +17,7 @@ const router = Router();
 //agregar carrito
 router.post("/",addCartControl);
 //ruta para listar todos los productos de un carrito
-router.post("/:cid", checkRoles, checkUserAuthenticated(["user"]), getCartsControl);
+router.post("/:cid", getCartsControl);
 router.post("/:cid/product/:pid", checkUserAuthenticated, checkRoles(["user"]), addProductToCartControl);
 router.delete("/:cid/product/:pid", checkUserAuthenticated, checkRoles(["user"]), deleteProductControl);
 // ruta para actualizar todos los productos de un carrito.
