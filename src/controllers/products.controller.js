@@ -1,6 +1,10 @@
 import { ProductsMongo } from "../daos/managers/products.mongo.js";
 // se importa el modelo de productos
-import { ProductsModel } from "../daos/models/product.model.js";
+import { ProductsModel } from "../daos/models/product.model.js"; 
+import { CustomError } from "../services/errors/customError.service.js";
+import { generateProductErrorParams } from "../services/errors/productErrorParams.service.js";
+import { EError } from "../enums/Eerror.js";
+import { logger } from "../utils/logger.js";
 
 //services
 const productsService = new ProductsMongo(ProductsModel);
@@ -51,19 +55,41 @@ export const getProducts = async (req,res)=>{
             prevLink: result.hasPrevPage ? `${baseUrl}?page=${result.prevPage}` : null,
             nextLink: result.hasNextPage ? `${baseUrl}?page=${result.nextPage}` : null,
         }
-        console.log("response: ", response);
+        // console.log("response: ", response);
         res.json(response);
     } catch (error) {
-        res.json({status:"error", message:error.message});
+        res.status(500).json({status: "error", message: error.message});
     }
 };
 
 export const createProduct = async(req,res)=>{
     try {
-        const productCreated = await productsService.createProduct(req.body);
-        res.json({status:"success", data:productCreated});
+        const {title, description, code, price, status, stock, category} = req.body;
+        if (!title || !description || !code || !price || !status || !stock || !category ) {
+            CustomError.createError({
+                name: "error al crear el producto",
+                cause: generateProductErrorParams(),
+                message: "error en la creación del producto",
+                errorCode: EError.INVALID_JSON
+            });
+            // return res.status(400).json({status: "error", message: "every key should be filled"})
+        }
+
+        const newProduct = req.body;
+        const products = await productsService.getProducts();
+        const matchCode = products.some(element=>element.code === code);
+        if (matchCode) {
+            return res.status(400).json({status: "error", message: "there is another product using this code"});
+        } else {
+
+        const productAdded = await productsService.addProduct(newProduct);
+        res.json({status: "success", product: productAdded});
+        // console.log(productAdded);
+        logger.http(productAdded);
+        }
     } catch (error) {
-        res.json({status:"error", message:error.message});
+        res.status(500).json({status: "error", message: error.message});
+        logger.error("mensaje de error");
     }
 };
 
@@ -75,8 +101,10 @@ export const getProductById = async(req,res)=>{
         if (!title || !description || !code || !price || !status || !stock || !category )
         // console.log("product: ", product);
         res.status(200).json({status:"success", result:product});
+        logger.http(product);
     } catch (error) {
         res.status(400).json({message:error.message});
+        logger.error("mensaje de error");
     }
 };
 
@@ -86,10 +114,9 @@ export const deleteProduct = async(req,res)=>{
         //luego eliminamos el producto
         const productdeleted = await productsService.deleteProduct(productId);
         res.json({status:"success", result:productdeleted.message});
+        logger.http(productdeleted);
     } catch (error) {
         res.status(400).json({message:error});
+        logger.error("mensaje de error");
     }
 };
-
-
-

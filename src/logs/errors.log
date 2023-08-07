@@ -1,0 +1,4 @@
+[31mfatal[39m: server listening on port 8080
+[31mfatal[39m: hubo un error al conectar la basa de datos bad auth : authentication failed
+[35merror[39m: mensaje de error
+[31mfatal[39m: mensaje de error crítico o fatal

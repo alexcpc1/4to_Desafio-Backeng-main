@@ -8,5 +8,4 @@ router.get("/", (req, res)=>{
     res.json({status: "success", data: products});
 });
 
-
 export {router as mockRouter}

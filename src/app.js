@@ -18,6 +18,7 @@ import passport from "passport";
 import { initPassport } from "./config/passport.config.js";
 import { mockRouter } from "./routes/mock.routes.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { logger } from "./utils/logger.js";
 
 //service
 const chatService = new ChatMongo(ChatModel);
@@ -25,8 +26,8 @@ const chatService = new ChatMongo(ChatModel);
 const app = express();
 const port = config.server.port;
 // const port = config.port;
-const httpServer = app.listen(port, ()=> console.log(`server listening on port ${port}`));
-
+// const httpServer = app.listen(port, ()=> console.log(`server listening on port ${port}`));
+const httpServer = app.listen(port, ()=> logger.info(`server listening on port ${port}`));
 //middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -72,7 +73,8 @@ app.use (errorHandler);
 
 // configuración socket servidor
 socketServer.on("connection",async(socketConnected)=>{
-    console.log(`Nuevo cliente conectado ${socketConnected.id}`);
+    // console.log(`Nuevo cliente conectado ${socketConnected.id}`);
+    logger.info(`nuevo socket cliente conectado ${socket.id}`)
     const messages = await chatService.getMessages();
     socketServer.emit("msgHistory", messages);
     //capturamos un evento del socket del cliente

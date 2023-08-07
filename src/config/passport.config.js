@@ -3,6 +3,7 @@ import localStrategy from "passport-local";
 import githubStrategy from "passport-github2";
 import { userModel } from "../daos/models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
+import { logger } from "../utils/logger.js";
 // import {UserManagerMongo} from "../daos/managers/userManagerMongo.js";
 
 // const usersService = new UserManagerMongo();
@@ -32,13 +33,14 @@ export const initPassport = ()=>{
                 userRegisterForm.role = "admin";
                 userRegisterForm.password = createHash(userRegisterForm.password);
                 const userCreated = await userModel.create(userRegisterForm);
-                console.log(userCreated);
+                // console.log(userCreated);
                 return done(null, userCreated);
             }else{
                 userRegisterForm.password = createHash(userRegisterForm.password);
                 const userCreated = await userModel.create(userRegisterForm);
 
-            console.log(userCreated);
+            // console.log(userCreated);
+            logger.debug(userCreated);
                 
             return done(null, userCreated);
             }
