@@ -5,6 +5,7 @@ import { CartsMongo } from "../daos/managers/carts.mongo.js";
 import { CartModel } from "../daos/models/cart.model.js";
 import { checkUserAuthenticated, checkRoles } from "../middlewares/auth.js";
 import { logger } from "../utils/logger.js";
+import { resetPassword } from "../controllers/sessions.controller.js";
 
 const router = Router();
 
@@ -141,6 +142,15 @@ router.get("/cart/:cid",async(req,res)=>{
         // console.log(error.message);
         res.send(`<div>Hubo un error al cargar esta vista</div>`);
     }
+});
+
+router.get("/forgot-password", (req, res)=>{
+    res.render("forgotPassword");
+});
+
+router.get("/reset-password", (req, res)=>{
+    const token = req.query.token;
+    res.render("resetPass", {token});
 });
 
 router.get("/loggerTest", (req, res)=>{

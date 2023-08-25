@@ -19,6 +19,7 @@ import { initPassport } from "./config/passport.config.js";
 import { mockRouter } from "./routes/mock.routes.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { logger } from "./utils/logger.js";
+import { usersRouter } from "./routes/users.routes.js";
 
 //service
 const chatService = new ChatMongo(ChatModel);
@@ -70,6 +71,8 @@ app.use("/realtimeproducts", realtimeRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/mockingproducts", mockRouter);
 app.use (errorHandler);
+app.use("/api/users", usersRouter);
+// app.use("/documentation", swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
 
 // configuración socket servidor
 socketServer.on("connection",async(socketConnected)=>{

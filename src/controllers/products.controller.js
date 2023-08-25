@@ -9,7 +9,7 @@ import { logger } from "../utils/logger.js";
 //services
 const productsService = new ProductsMongo(ProductsModel);
 
-export const getProducts = async (req,res)=>{
+export const getProductsControl = async (req,res)=>{
     try {
         const {limit=10,page=1,sort,category,stock} = req.query;
         if(sort) {
@@ -62,7 +62,7 @@ export const getProducts = async (req,res)=>{
     }
 };
 
-export const createProduct = async(req,res)=>{
+export const createProductControl = async(req,res)=>{
     try {
         const {title, description, code, price, status, stock, category} = req.body;
         if (!title || !description || !code || !price || !status || !stock || !category ) {
@@ -93,7 +93,7 @@ export const createProduct = async(req,res)=>{
     }
 };
 
-export const getProductById = async(req,res)=>{
+export const getProductByIdControl = async(req,res)=>{
     try {
         const {pid} = req.params;
         const product = await productsService.getProductById(pid);
@@ -108,7 +108,7 @@ export const getProductById = async(req,res)=>{
     }
 };
 
-export const deleteProduct = async(req,res)=>{
+export const deleteProductControl = async(req,res)=>{
     try {
         const productId = req.params.pid;
         //luego eliminamos el producto

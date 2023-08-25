@@ -18,14 +18,14 @@ const router = Router();
 router.post("/",addCartControl);
 //ruta para listar todos los productos de un carrito
 router.post("/:cid", getCartsControl);
-router.post("/:cid/product/:pid", checkUserAuthenticated, checkRoles(["user"]), addProductToCartControl);
-router.delete("/:cid/product/:pid", checkUserAuthenticated, checkRoles(["user"]), deleteProductControl);
+router.post("/:cid/product/:pid", checkUserAuthenticated, checkRoles(["user", "premium"]), addProductToCartControl);
+router.delete("/:cid/product/:pid", checkUserAuthenticated, checkRoles(["user", "premium"]), deleteProductControl);
 // ruta para actualizar todos los productos de un carrito.
-router.put("/:cid", checkUserAuthenticated, checkRoles(["user"]), updateCartControl);
+router.put("/:cid", checkUserAuthenticated, checkRoles(["user", "premium"]), updateCartControl);
 //ruta para actualizar cantidad de un producto en el carrito
-router.put("/:cid/product/:pid", checkUserAuthenticated, checkRoles(["user"]), updateQuantityInCartControl);
+router.put("/:cid/product/:pid", checkUserAuthenticated, checkRoles(["user", "premium"]), updateQuantityInCartControl);
 //ruta para eliminar un producto del carrito
-router.delete("/:cid", checkUserAuthenticated, checkRoles(["user"]), deleteCartControl);
+router.delete("/:cid", checkUserAuthenticated, checkRoles(["user", "premium"]), deleteCartControl);
 router.post("/:cid/purchase", purchaseControl);
 
 export {router as cartsRouter};

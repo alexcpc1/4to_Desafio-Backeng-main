@@ -3,23 +3,27 @@ class UserMongo{
         this.model=model;
     };
 
-    async addUser(user){
-        try {
-            const data = await this.model.create(user);
-            const response = JSON.parse(JSON.stringify(data));
-            return response;
-        } catch (error) {
-            throw new Error(`Error al guardar: ${error.message}`);
-        }
-    };
+    // async addUser(user){
+    //     try {
+    //         const data = await this.model.create(user);
+    //         const response = JSON.parse(JSON.stringify(data));
+    //         return response;
+    //     } catch (error) {
+    //         throw new Error(`Error al guardar: ${error.message}`);
+    //     }
+    // };
 
-    async getUserByEmail(email){
+    async getUserByEmail(emailUser){
         try {
-            const data = await this.model.findOne({email:email});
-            const response = JSON.parse(JSON.stringify(data));
-            return response;
+            const user = await this.model.findOne({email:emailUser});
+            if (user) {
+                return JSON.parse(JSON.stringify(user));
+            } else {
+                throw new Error("el usuario no existe");
+            }
+            
         } catch (error) {
-            throw new Error(`Error al obtener usuario: ${error.message}`);
+            throw error;
         }
     };
     
@@ -39,6 +43,18 @@ class UserMongo{
         try {
             const userCreated = await this.model.create(user);
             return userCreated;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    async updateUser(userId,newInfo){
+        try {
+            const userUpdated = await this.model.findByIdAndUpdate(userId,newInfo,{new:true});
+            if(!userUpdated){
+                throw new Error("usuario no encontrado");
+            }
+            return userUpdated;
         } catch (error) {
             throw error;
         }

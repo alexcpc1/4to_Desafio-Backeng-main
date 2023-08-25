@@ -4,6 +4,8 @@ import { userModel } from "../daos/models/user.model.js";
 import { createHash } from "../utils.js";
 import { isValidPassword } from "../utils.js";
 import passport from "passport";
+// import { sendRecovery } from "../controllers/sessions.controller.js";
+// import { resetPassword } from "../controllers/sessions.controller.js";
 
 const router = Router();
 // const userManager = new UserManagerMongo(userModel)
