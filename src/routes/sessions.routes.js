@@ -4,8 +4,8 @@ import { userModel } from "../daos/models/user.model.js";
 import { createHash } from "../utils.js";
 import { isValidPassword } from "../utils.js";
 import passport from "passport";
-// import { sendRecovery } from "../controllers/sessions.controller.js";
-// import { resetPassword } from "../controllers/sessions.controller.js";
+import { sendRecovery } from "../controllers/sessions.controller.js";
+import { resetPassword } from "../controllers/sessions.controller.js";
 
 const router = Router();
 // const userManager = new UserManagerMongo(userModel)
@@ -43,6 +43,10 @@ router.get("/logout",(req, res)=>{
             }
     })   
 });
+
+router.post("/forgot-password", sendRecovery);
+ 
+router.post("/reset-password", resetPassword);
 
 router.get("/current", (req, res)=>{
     if(!req.user){
