@@ -48,10 +48,23 @@ export const addProductToCartControl = async(req,res)=>{
         const productId = req.params.pid;
         const cart = await  cartsService.getCarts(cartId);
         // verificar que el producto exista antes de agregarlo al carrito.
-        const result = await cartsService.addProductToCart(cartId,productId);
-        res.json({status:"success", data:result});
-        logger.http(result);
-    } catch (error) {
+        if (cart) {
+            const product = await productsService.getCarts(productId);
+            if (product) {
+                if(req.user.role === "premium" && JSON.stringify(product.owner) == JSON.stringify(req.user._id)){
+                    res.status(400).json({status: "error", message: "No se le permite agregar este producto"});
+                } else{
+                const result = await cartsService.addProductToCart(cartId, productId);
+                res.json({status: "success", message: result});
+                logger.http(result);
+                }
+            } else {
+                res.status(400).json({status: "error", message: "No puede agregar este producto"});
+            }
+        } else{
+            res.status(400).json({status: "error", message: "este carrito no existe"});
+        }
+        } catch (error) {
         res.status(500).json({status: "error", message: error.message});
         logger.error("mensaje de error");
     }

@@ -12,6 +12,7 @@ const productSchema= new mongoose.Schema({
     stock: {type: Number,required:true},
     status:{type: Boolean,required:true},
     category:{ type: String,required:true,enum: ['Deportes', 'Tecnología','Ropa']},
+    owner:{type: mongoose.Schema.Types.ObjectId, ref:"users"}
 });
 
 productSchema.plugin(mongoosePaginate);

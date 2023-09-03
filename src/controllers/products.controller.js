@@ -14,7 +14,7 @@ export const getProductsControl = async (req,res)=>{
         const {limit=10,page=1,sort,category,stock} = req.query;
         if(sort) {
         if(!["asc","desc"].includes(sort)){
-            res.json({status:"error", message:"ordenamiento no valido, solo puede ser asc o desc"})
+            res.status(400).json({status:"error", message:"ordenamiento no valido, solo puede ser asc o desc"})
             }
         };
 
@@ -82,7 +82,8 @@ export const createProductControl = async(req,res)=>{
             return res.status(400).json({status: "error", message: "there is another product using this code"});
         } else {
 
-        const productAdded = await productsService.addProduct(newProduct);
+        newProduct.owner = req.user._id;   
+        const productAdded = await productsService.createProduct(newProduct);
         res.json({status: "success", product: productAdded});
         // console.log(productAdded);
         logger.http(productAdded);
@@ -95,8 +96,8 @@ export const createProductControl = async(req,res)=>{
 
 export const getProductByIdControl = async(req,res)=>{
     try {
-        const {pid} = req.params;
-        const product = await productsService.getProductById(pid);
+        const productId = req.params.pid
+        const product = await productsService.getProductById(productId);
         const {title, description, code, price, status, stock, category} = req.body;
         if (!title || !description || !code || !price || !status || !stock || !category )
         // console.log("product: ", product);
@@ -108,15 +109,45 @@ export const getProductByIdControl = async(req,res)=>{
     }
 };
 
+export const updateProductControl = async(req, res)=>{
+    try {
+        const productId = req.params.pid;
+        const {title, description, code, price, status, stock, category} = req.body;
+        if (!title || !description || !code || !price || !status || !stock || !category ) {
+            return res.status(400).json({status: "error", message: "every key should be filled"})
+        }
+        
+        const newData = req.body; 
+
+        const product = await productsService.getProductById(productId);
+
+        if(req.user.role === "premium" && JSON.stringify(product.owner) == JSON.stringify(req.user._id) || req.user.role === "admin"){
+        const updatedProduct = await productsService.updateProducts(productId, newData);
+        res.json({status: "success", message: "product updated", product: updatedProduct});
+        logger.http(updatedProduct);
+        } else{
+            res.status(400).json({status: "error", message: "No se le permite actualizar este producto"});
+        }
+    } catch (error) {
+        res.status(400).json({status: "error", message: "No hay ningún producto con este identificador"});
+        logger.error("mensaje de error");
+    }
+};
+
 export const deleteProductControl = async(req,res)=>{
     try {
         const productId = req.params.pid;
-        //luego eliminamos el producto
-        const productdeleted = await productsService.deleteProduct(productId);
-        res.json({status:"success", result:productdeleted.message});
-        logger.http(productdeleted);
+        const product = await productsService.getProductById(productId);
+        //validamos si el usuario que esta barrando el producto es premiun
+        if(req.user.role === "premium" && JSON.stringify(product.owner) == JSON.stringify(req.user._id) || req.user.role === "admin"){
+            const productList = await productsService.deleteProduct(productId);
+            res.json({status: "success", message: "producto eliminado", product: productList});
+            logger.http(productList);
+        } else{
+            res.status(400).json({status: "error", message: "No tienes permisos para eliminar este producto"});
+        }       
     } catch (error) {
-        res.status(400).json({message:error});
+        res.status(400).json({status: "error", message: "No hay ningún producto con este identificador"});
         logger.error("mensaje de error");
     }
 };

@@ -57,7 +57,7 @@ export const initPassport = ()=>{
 // estrategia login
 passport.use("loginStrategy", new localStrategy(
     {
-    usernameField: "email"
+        usernameField: "email"
     },
     async(username, password,done)=>{
     try {

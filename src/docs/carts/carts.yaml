@@ -1,0 +1,211 @@
+paths:
+  /api/carts/:
+    post:
+      summary: Ruta para crear un carrito de compras
+      tags:
+        - carts
+      responses:
+        "200":
+          description: El carrito se creó correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/emptyCart'
+        "500":
+          description: Error interno del servidor
+
+  /api/carts/{cid}:
+    get:
+      summary: Ruta para obtener un carrito de comprar a partir de su id
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito que se desea solicitar
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: El carrito se obtuvo correctamente
+          content:
+            application/json:
+              schema:               
+                $ref: '#components/schemas/emptyCart'
+        "400":
+          description: No existe el carrito con este id
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Ruta para eliminar un carrito de compras a partir de su id
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito que se desea eliminar
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: El carrito se eliminó correctamente
+        "400":
+          description: No existe el carrito con ese id
+        "500":
+          description: Error interno del servidor
+
+  api/carts/{cid}/product/{pid}:
+    post:
+      summary: Ruta para agregar producto a un carrito proporcionando sus respectivos id
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito al que se le desea agregar el producto
+          schema:
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: id del producto que se desea agregar al carrito
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: El carrito se obtuvo correctamente
+          content:
+            application/json:
+              schema:               
+                $ref: '#components/schemas/fullCart'
+        "400":
+          description: No existe el carrito con este id
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Ruta para eliminar un producto del carrito proporcionando sus respectivos id
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito al que se le desea eliminar el producto
+          schema:
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: id del producto que se desea eliminar al carrito
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: El producto se eliminó correctamente
+        "400":
+          description: No existe el carrito con ese id
+        "500":
+          description: Error interno del servidor
+   
+  api/carts/{cid}/purchase:
+    get:
+      summary: Ruta para confirmar la compra de los productos que se encuentran en el carrito
+      tags:
+        - carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito donde se encuentran los productos que se desean comprar
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Se genera ticket de compra correctamente
+          content:
+            application/json:
+              schema:               
+                $ref: '#components/schemas/ticket'
+        "400":
+          description: No existe el carrito con ese id
+        "500":
+          description: Error interno del servidor
+
+
+
+
+components:
+  schemas:
+    emptyCart:
+      type: object
+      properties:
+        _id:
+          type: objectId
+          description: id autogenerado por la base de datos
+        products:
+          type: array
+          description: productos que pertenecen al carrito de compras
+        __v:
+          type: number
+          description: version del producto
+      example:
+        _id: 64770dec7dcfc21330ff85c2
+        products: []
+        __v: 0
+    fullCart:
+      type: object
+      properties:
+        _id:
+          type: objectId
+          description: id autogenerado por la base de datos
+        products:
+          type: array
+          description: productos que pertenecen al carrito de compras
+          properties:
+            _id:
+              type: objectId
+              description: id del producto
+            quantity:
+              type: number
+              description: cantidad del producto
+        __v:
+          type: number
+          description: version del producto
+      example:
+        _id: 64770dec7dcfc21330ff85c2
+        products:
+          [{"quantity": 2,
+          "_id": "646a02edaefc10a9c3acab4c"}]
+        __v: 0
+    ticket:
+      type: object
+      properties:
+        _id:
+          type: objectId
+          description: id autogenerado por la base de datos
+        code:
+          type: string
+          description: código único generado por myuuid
+        purchase_daytime: 
+          type: date
+          description: fecha en la que se realiza la compra
+        amount:
+          type: number
+          description: total a pagar en pesos
+        purchaser:
+          type: string
+          description: persona que compra los productos
+        __v:
+          type: number
+          description: version del ticket
+      example:
+        _id: 64b57ca49f1c30a7551938b1
+        code: "db963c64-8177-4adf-8be9-e8ed0a67e37b"
+        purchase_daytime: 2023-07-17T17:38:44.000+00:00
+        amount: 199970
+        purchaser: "ctorres@gmail.com"
+        __v: 0
+    

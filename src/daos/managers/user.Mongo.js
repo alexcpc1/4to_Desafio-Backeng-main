@@ -1,17 +1,19 @@
+import { userModel } from "../models/user.model.js";
+
 class UserMongo{
-    constructor(model){
-        this.model=model;
+    constructor(){
+        this.model=userModel;
     };
 
-    // async addUser(user){
-    //     try {
-    //         const data = await this.model.create(user);
-    //         const response = JSON.parse(JSON.stringify(data));
-    //         return response;
-    //     } catch (error) {
-    //         throw new Error(`Error al guardar: ${error.message}`);
-    //     }
-    // };
+    async addUser(user){
+        try {
+            const data = await this.model.create(user);
+            const response = JSON.parse(JSON.stringify(data));
+            return response;
+        } catch (error) {
+            throw new Error(`Error al guardar: ${error.message}`);
+        }
+    };
 
     async getUserByEmail(emailUser){
         try {

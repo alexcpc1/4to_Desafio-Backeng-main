@@ -9,13 +9,17 @@ const userManager = new UserMongo();
 
 export const sendRecovery = async(req, res)=>{
     const {email} = req.body;
+      //validar si el correo existe en db
     try {
         const user = await userManager.getUserByEmail(email);
-        const token = generateEmailToken(email, 180);
+        //generar el token para este usuario
+        //Nota:1hora*60min*60s = 3600seg ;  3min*60s
+        const token = generateEmailToken(email, 180);//token con tiempo de exp de 3min
+        //enviar el mensaje con el enlace y el token
         await sendRecoveryEmail(email, token);
         res.send("se ha enviado un link a tu correo electrónico")
     } catch (error) {
-        res.json({status: "error", message: error.message});
+        res.json({status: "errores", message: error.message});
     }
 };
 
