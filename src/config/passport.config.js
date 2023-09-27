@@ -4,9 +4,9 @@ import githubStrategy from "passport-github2";
 import { userModel } from "../daos/models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 import { logger } from "../utils/logger.js";
-// import {UserManagerMongo} from "../daos/managers/userManagerMongo.js";
+import { UserMongo } from "../daos/managers/user.Mongo.js";
 
-// const usersService = new UserManagerMongo();
+const usersService = new UserMongo();
 
 export const initPassport = ()=>{
 
@@ -32,11 +32,14 @@ export const initPassport = ()=>{
             if (userRegisterForm.email.endsWith("@coder.com") && userRegisterForm.password.startsWith("adminCod3r")) {
                 userRegisterForm.role = "admin";
                 userRegisterForm.password = createHash(userRegisterForm.password);
+                // userRegisterForm.avatar = req.file.filename;
                 const userCreated = await userModel.create(userRegisterForm);
                 // console.log(userCreated);
+                logger.debug(userCreated);
                 return done(null, userCreated);
             }else{
                 userRegisterForm.password = createHash(userRegisterForm.password);
+                // userRegisterForm.avatar = req.file.filename;
                 const userCreated = await userModel.create(userRegisterForm);
 
             // console.log(userCreated);
@@ -66,6 +69,8 @@ passport.use("loginStrategy", new localStrategy(
         if (userDB) {
             
             if (isValidPassword(password, userDB)) {
+                userDB.last_connection = new Date();
+                await usersService.updateUser(userDB._id, userDB);
                 return done(null, JSON.parse(JSON.stringify(userDB)));
             } else{
                 return done(null,false);

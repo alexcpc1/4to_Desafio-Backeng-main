@@ -154,7 +154,7 @@ export const purchaseControl = async(req,res)=>{
         }else{
             // console.log(cart);
             logger.debug(cart);
-       for (let i = 0; i < cart.products.length; i++) {
+        for (let i = 0; i < cart.products.length; i++) {
        
         let productIdCart = cart.products[i]._id;
        

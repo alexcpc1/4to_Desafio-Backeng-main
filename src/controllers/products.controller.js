@@ -5,9 +5,12 @@ import { CustomError } from "../services/errors/customError.service.js";
 import { generateProductErrorParams } from "../services/errors/productErrorParams.service.js";
 import { EError } from "../enums/Eerror.js";
 import { logger } from "../utils/logger.js";
+import { UserMongo } from "../daos/managers/user.Mongo.js";
+import { deletedProductEmail } from "../utils/message.js";
 
 //services
 const productsService = new ProductsMongo(ProductsModel);
+const userManager = new UserMongo();
 
 export const getProductsControl = async (req,res)=>{
     try {
@@ -141,6 +144,10 @@ export const deleteProductControl = async(req,res)=>{
         //validamos si el usuario que esta barrando el producto es premiun
         if(req.user.role === "premium" && JSON.stringify(product.owner) == JSON.stringify(req.user._id) || req.user.role === "admin"){
             const productList = await productsService.deleteProduct(productId);
+            const ownerProduct = await userManager.getUserById(product.owner);
+            if (ownerProduct.role === "premium") {
+                deletedProductEmail(ownerProduct.email);
+            }
             res.json({status: "success", message: "producto eliminado", product: productList});
             logger.http(productList);
         } else{

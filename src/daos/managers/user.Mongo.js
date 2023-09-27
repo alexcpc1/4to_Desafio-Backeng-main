@@ -61,6 +61,16 @@ class UserMongo{
             throw error;
         }
     };
+
+    async deleteUser(id){
+        try {
+            const data = await this.model.findByIdAndDelete(id);
+          
+            return {message: `el usuario con el id ${id} fué eliminado`};
+        } catch (error) {
+            throw new Error(`Error al eliminar el usuario ${error.message}`);
+        }
+    };
 }
 
 export {UserMongo};

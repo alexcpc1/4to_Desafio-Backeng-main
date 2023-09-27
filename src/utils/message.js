@@ -22,7 +22,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-//Función para enviar corre de recuperación de contraseña
+//Función para enviar correo de recuperación de contraseña
 export const sendRecoveryEmail = async(userEmail, token)=>{
     //generar link con el token y el tiempo de expiración
     const link = `http://localhost:8080/reset-password?token=${token}`;
@@ -42,4 +42,44 @@ export const sendRecoveryEmail = async(userEmail, token)=>{
                 </div>
         `
     })
-}
+};
+
+export const deleteInactivityEmail = async(userEmail)=>{
+  
+    const link = `http://localhost:8080/signup`;
+    
+    await transporter.sendMail({
+        from: "Ecommerce Aljorna",
+        to: userEmail,
+        subject: "Cuenta eliminada por inactividad",
+        html:`
+                <div>
+                    <h2>Cuenta eliminada</h2>
+                    <p>Hola, tu cuenta fué eliminada por inactividad, si quieres volver a registrarte puedes hacerlo a través del siguiente enlace</p>
+                    <a href="${link}">
+                        <button>Ir a la página</button>
+                    </a>
+                </div>
+        `
+    })
+};
+
+export const deletedProductEmail = async(userEmail)=>{
+  
+    const link = `http://localhost:8080/login`;
+    
+    await transporter.sendMail({
+        from: "Ecommerce Aljorna",
+        to: userEmail,
+        subject: "Producto Eliminado",
+        html:`
+                <div>
+                    <h2>Producto Eliminado</h2>
+                    <p>Hola, tu producto ha sido eliminado de la página, puedes verificarlo a través del siguiente enlace</p>
+                    <a href="${link}">
+                        <button>Ir a la página</button>
+                    </a>
+                </div>
+        `
+    })
+};

@@ -8,11 +8,12 @@ const productSchema= new mongoose.Schema({
     description: {type: String,required:true},
     price: { type: Number,required:true,min:1},
     thumbnail: {type: String,required:true},
-    code: {type: String,required:true},
+    code: {type: String, required: true, unique: true},
     stock: {type: Number,required:true},
     status:{type: Boolean,required:true},
     category:{ type: String,required:true,enum: ['Deportes', 'Tecnología','Ropa']},
-    owner:{type: mongoose.Schema.Types.ObjectId, ref:"users"}
+    owner:{type: mongoose.Schema.Types.ObjectId, ref:"users"},
+    image: {type: String, default: ""}
 });
 
 productSchema.plugin(mongoosePaginate);

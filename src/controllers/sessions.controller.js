@@ -11,6 +11,9 @@ export const sendRecovery = async(req, res)=>{
     const {email} = req.body;
       //validar si el correo existe en db
     try {
+        if (!email) {
+            return res.send("debes colocar un correo electrónico <a href=/forgot-password>volver</a>");
+        }
         const user = await userManager.getUserByEmail(email);
         //generar el token para este usuario
         //Nota:1hora*60min*60s = 3600seg ;  3min*60s

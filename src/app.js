@@ -92,3 +92,5 @@ socketServer.on("connection",async(socketConnected)=>{
         socketServer.emit("msgHistory", messages);
     });
 });
+
+export {app}
